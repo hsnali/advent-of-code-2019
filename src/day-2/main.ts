@@ -12,16 +12,10 @@ export const intCodeCalc = (opcodes: string | number[]) => {
     if (instructionPointer === 99 || index % 4 !== 0) return;
     const slice = codes.slice(index, index + 4);
     const [, noun, verb, savePos] = slice;
-
-    switch (instructionPointer) {
-      case 1:
-        codes[savePos] = codes[noun] + codes[verb];
-        break;
-      case 2:
-        codes[savePos] = codes[noun] * codes[verb];
-        break;
-      default:
-        break;
+    if (instructionPointer === 1) {
+      codes[savePos] = codes[noun] + codes[verb];
+    } else if (instructionPointer === 2) {
+      codes[savePos] = codes[noun] * codes[verb];
     }
   });
 
