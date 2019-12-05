@@ -1,0 +1,32 @@
+# Build Targets
+.dip_env
+public
+dist
+.reports
+coverage
+.tmp
+
+# Compiled on-demand
+lib/tslint/*.js
+lib/fractal/*.js
+lib/jest/*.js
+lib/typedoc-theme-md/**/*.js
+lib/typedoc-theme-md/**/*.d.ts
+*.map
+
+# Generated manifests
+*-manifest.json
+
+# Generated files
+*.gen.*
+
+# Generated docs
+src/docs/10-styles/reference
+src/docs/20-scripts/reference
+
+# Generated SCSS
+_sass-inline-svg*
+
+# Files which people keep adding >:(
+package-lock.json
+node_modules
