@@ -1,25 +1,25 @@
 {
-	"singleQuote": true,
-	"useTabs": false,
-	"overrides": [
-		{
-			"files": "package.json",
-			"options": {
-				"useTabs": false,
-				"tabWidth": 2
-			}
-		},
-		{
-			"files": [
-				".prettierrc",
-				".stylelintrc",
-				".modernizrrc",
-				".eslintrc",
-				".babelrc"
-			],
-			"options": {
-				"parser": "json"
-			}
-		}
-	]
+  "singleQuote": true,
+  "useTabs": false,
+  "overrides": [
+    {
+      "files": "package.json",
+      "options": {
+        "useTabs": false,
+        "tabWidth": 2
+      }
+    },
+    {
+      "files": [
+        ".prettierrc",
+        ".stylelintrc",
+        ".modernizrrc",
+        ".eslintrc",
+        ".babelrc"
+      ],
+      "options": {
+        "parser": "json"
+      }
+    }
+  ]
 }
