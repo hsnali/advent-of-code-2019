@@ -5,6 +5,7 @@
   "license": "MIT",
   "scripts": {
     "start": "ts-node src/index",
+    "tsn": "ts-node",
     "test": "jest"
   },
   "dependencies": {
