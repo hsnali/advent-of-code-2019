@@ -1,6 +1,6 @@
-module.exports = function(plop) {
-  const path = require('path');
+const path = require('path');
 
+module.exports = function(plop) {
   plop.setGenerator('puzzle', {
     description: 'application controller logic',
     prompts: [
