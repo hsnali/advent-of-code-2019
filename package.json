@@ -7,7 +7,7 @@
     "start": "ts-node src/index",
     "test": "jest",
     "tsn": "ts-node",
-    "lint": "eslint src/**/*.ts",
+    "lint": "eslint 'src/**/*.ts'",
     "plop": "plop"
   },
   "dependencies": {
