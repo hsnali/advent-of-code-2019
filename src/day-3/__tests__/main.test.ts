@@ -173,6 +173,19 @@ describe('Day 3: Part 1', () => {
 
     expect(result).toBe(6);
   });
+
+  test('Calculate the Manhattan Distance of R75,D30,R83,U83,L12,D49,R71,U7,L72 & U62,R66,U55,R34,D71,R55,D58,R83', () => {
+    const c1 = getCoordinates('R8,U5,L5,D3');
+    const c2 = getCoordinates('U7,R6,D4,L4');
+    const arraySize = getLargestPoint([...c1, ...c2]);
+    const grid = generateArrayGrid(arraySize + 1, '.');
+    const paths = drawPath(c2, drawPath(c1, grid));
+    const intersections = getIntersections(paths);
+
+    const result = getLowestDistance(intersections);
+
+    expect(result).toBe(159);
+  });
 });
 
 // describe('Day 3: Part 2', () => {

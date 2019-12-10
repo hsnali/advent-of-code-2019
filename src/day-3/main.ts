@@ -14,6 +14,7 @@ export const getCoordinates = (paths: string, origin = [0, 0]) => {
 
   paths.split(',').reduce((pointer: number[], current: string) => {
     const { direction, vector } = convertPath(current);
+    // console.log('direction vector', direction, vector);
 
     let [x, y] = pointer;
     let x2 = x;
@@ -66,15 +67,17 @@ export const drawPath = (
     let [x0, y0] = step;
     const [x1, y1] = current;
 
-    grid[x1][y1] = grid[x1][y1] === '.' ? '+' : 'X';
-    step = current;
-
     let directionX = x1 >= x0 ? 1 : -1;
     let directionY = y1 >= y0 ? 1 : -1;
 
     let indexX = x0;
     let indexY = y0;
     let loop = 0;
+
+    step = current;
+
+    // console.log([x1, y1]);
+    grid[x1][y1] = grid[x1][y1] === '.' ? '+' : 'X';
 
     while (true) {
       let moveX = indexX + 1 * directionX;
