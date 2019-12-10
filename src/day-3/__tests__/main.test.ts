@@ -1,4 +1,10 @@
-import { convertPath, getCoordinates, getLargestPoint } from '../main';
+import {
+  convertPath,
+  getCoordinates,
+  getLargestPoint,
+  generateArrayGrid,
+  drawPath
+} from '../main';
 
 describe('Day 3: Part 1', () => {
   test('Convert a text path to a direction and vector', () => {
@@ -28,7 +34,7 @@ describe('Day 3: Part 1', () => {
     expect(getLargestPoint([3, 2, 8, 7])).toBe(8);
   });
 
-  test('Calcualtes the largest number in an array of number arrays', () => {
+  test('Calculates the largest number in an array of number arrays', () => {
     expect(
       getLargestPoint([
         [1, 2],
@@ -36,6 +42,26 @@ describe('Day 3: Part 1', () => {
         [3, 3]
       ])
     ).toBe(7);
+  });
+
+  test('Generate a 2 dimentional array of size N', () => {
+    expect(generateArrayGrid(2, 0)).toMatchObject([
+      [0, 0],
+      [0, 0]
+    ]);
+  });
+
+  test('Draws a path on a two dimentional grid', () => {
+    const grid = generateArrayGrid(4, '.');
+    const result = drawPath('R2,U2', grid);
+
+    console.table(result);
+    expect(result).toMatchObject([
+      ['.', '.', '.', '.'],
+      ['|', '.', '.', '.'],
+      ['+', '|', '+', '.'],
+      ['.', '.', '.', '.']
+    ]);
   });
 });
 
