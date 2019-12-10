@@ -55,19 +55,18 @@ export const generateArrayGrid = (
 ) => Array.from({ length }, () => Array.from({ length }, () => placeholder));
 
 export const drawPath = (
-  path: string,
+  coordinates: number[][],
   grid: (string | number)[][],
   origin: number[] = [0, 0]
 ) => {
-  const vectors = getCoordinates(path);
+  // const vectors = getCoordinates(path);
   const symbol = '|';
   let step = origin;
-
-  vectors.forEach((current, index) => {
+  coordinates.forEach((current, index) => {
     let [x0, y0] = step;
     const [x1, y1] = current;
 
-    grid[x1][y1] = '+';
+    grid[x1][y1] = grid[x1][y1] === '.' ? '+' : 'X';
     step = current;
 
     let directionX = x1 >= x0 ? 1 : -1;
@@ -92,6 +91,7 @@ export const drawPath = (
       if (indexX == x1 && indexY == y1) {
         break;
       }
+
       if (grid && grid[indexX]) {
         let sign = grid[indexX][indexY] !== '.' ? 'X' : symbol;
         grid[indexX][indexY] = sign;
@@ -106,4 +106,24 @@ export const drawPath = (
   });
 
   return grid;
+};
+
+export const getIntersections = (path: string[][]) => {
+  return path.reduce((points, current, index) => {
+    let coords = current.reduce((row, item, index) => {
+      if (item === 'X') return [...row, index];
+      return row;
+    }, []);
+
+    return [...points, ...coords.map(i => [index, i])];
+  }, []);
+};
+
+export const getManhattanDistance = (point: number[]) =>
+  point.reduce((total, current) => current + total, 0);
+
+export const getLowestDistance = (coordinates: number[][]) => {
+  const distances = coordinates.map(getManhattanDistance);
+  const lowest = Math.min.apply(Math, distances);
+  return lowest;
 };
