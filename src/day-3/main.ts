@@ -1,11 +1,4 @@
-interface IPath {
-  direction: string;
-  vector: number;
-}
-
-interface IDirection {
-  [index: string]: number[];
-}
+import { IGrid, IDirection, IPath } from './interfaces';
 
 const directions: IDirection = {
   U: [0, 1],
@@ -15,7 +8,7 @@ const directions: IDirection = {
 };
 
 export const getPathMove = (path: string): number[] => {
-  const [, direction, vector] = path.split(/([A-Z])/);
+  const [, direction] = path.split(/([A-Z])/);
   return directions[direction];
 };
 
@@ -24,7 +17,7 @@ export const convertPath = (path: string): IPath => {
   return { direction, vector: +vector };
 };
 
-export const mapPath = (path: string, grid = {}, marker = '-') => {
+export const mapPath = (path: string, grid: IGrid = {}, marker = '-') => {
   const pathSteps: string[] = path.split(',');
   let x0 = 0;
   let y0 = 0;
@@ -38,11 +31,7 @@ export const mapPath = (path: string, grid = {}, marker = '-') => {
     for (let i = 0; i < vector; i++) {
       x1 += xMove;
       y1 += yMove;
-      //@ts-ignore
       let contents = grid[`${x1}_${y1}`] || marker;
-      // console.log('contents', contents);
-
-      //@ts-ignore
       grid[`${x1}_${y1}`] =
         contents !== undefined && contents !== marker
           ? contents + marker
@@ -56,15 +45,9 @@ export const mapPath = (path: string, grid = {}, marker = '-') => {
   return grid;
 };
 
-export const getIntersections = (grid = {}): number[][] =>
+export const getIntersections = (grid: IGrid = {}): number[][] =>
   Object.keys(grid).reduce((intersections, current) => {
-    //@ts-ignore
-    // console.log('current', current, grid[current]);
-
-    //@ts-ignore
     if (grid[current].length === 1) return intersections;
-    //@ts-ignore
-    const item = grid[current];
     const [x, y] = current.split('_');
     return [...intersections, [+x, +y]];
   }, []);
