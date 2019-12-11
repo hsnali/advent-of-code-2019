@@ -16,13 +16,11 @@ const directions: IDirection = {
 
 export const getPathMove = (path: string): number[] => {
   const [, direction, vector] = path.split(/([A-Z])/);
-
   return directions[direction];
 };
 
 export const convertPath = (path: string): IPath => {
   const [, direction, vector] = path.split(/([A-Z])/);
-
   return { direction, vector: +vector };
 };
 
@@ -54,11 +52,12 @@ export const mapPath = (path: string, grid = {}, marker = '-') => {
     x0 = x1;
     y0 = y1;
   });
+
   return grid;
 };
 
-export const getIntersections = (grid = {}): number[][] => {
-  let v = Object.keys(grid).reduce((intersections, current) => {
+export const getIntersections = (grid = {}): number[][] =>
+  Object.keys(grid).reduce((intersections, current) => {
     //@ts-ignore
     // console.log('current', current, grid[current]);
 
@@ -67,15 +66,11 @@ export const getIntersections = (grid = {}): number[][] => {
     //@ts-ignore
     const item = grid[current];
     const [x, y] = current.split('_');
-    // console.log(x, y);
     return [...intersections, [+x, +y]];
   }, []);
 
-  return v;
-};
-
 export const addDistances = (point: number[]) =>
-  point.reduce((total, current) => current + total, 0);
+  point.reduce((total, current) => Math.abs(current) + total, 0);
 
 export const getManhattanDistance = (coordinates: number[][]) => {
   const distances = coordinates.map(addDistances);

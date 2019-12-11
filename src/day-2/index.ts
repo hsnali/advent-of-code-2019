@@ -15,7 +15,7 @@ for (let noun = 0; noun <= 99; noun++) {
   for (let verb = 0; verb <= 99; verb++) {
     const result = intCodeCalc(convertOpcodes(input, noun, verb)).split(',')[0];
     if (result === PART_TWO_SEARCH) {
-      console.log(`Part Two: ${noun}, ${verb}, ${100 * noun + verb}`);
+      console.log(`Part Two: (${noun}, ${verb}) ${100 * noun + verb}`);
     }
   }
 }

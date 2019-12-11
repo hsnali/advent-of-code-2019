@@ -1,30 +1,11 @@
-// import 'console.table';
+import { mapPath, getIntersections, getManhattanDistance } from './main';
+import input from './input';
 
-// import {
-//   //   convertPath,
-//   getCoordinates,
-//   getLargestPoint,
-//   generateArrayGrid,
-//   drawPath,
-//   getIntersections,
-//   getManhattanDistance,
-//   getLowestDistance
-// } from './main';
+const [path1, path2] = input;
 
-// import input from './input';
+const mergedPaths = mapPath(path2, mapPath(path1, {}, 'A'), 'B');
+const intersections = getIntersections(mergedPaths);
+const distance = getManhattanDistance(intersections);
 
-// const [sample1, sample2] = input;
-// const p1 = getCoordinates(sample1);
-// // const p2 = getCoordinates(sample2);
-// //@ts-ignore
-// const arraySize = getLargestPoint(p1);
-// // const arraySize = getLargestPoint([...p1, ...p2]);
-// // const grid = generateArrayGrid(arraySize + 1, '.');
-// // const path = drawPath(p1, grid);
-// // const paths = drawPath(p2, drawPath(p1, grid));
-// //@ts-ignore
-// // const intersections = getIntersections(paths);
-// //@ts-ignore
-// // const result = getLowestDistance(intersections);
-
-// console.log(p1);
+console.log('************ Day 3 ************');
+console.log(`Part One: ${distance}`);
