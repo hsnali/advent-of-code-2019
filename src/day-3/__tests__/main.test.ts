@@ -70,7 +70,7 @@ describe('Day 3: Part 1', () => {
   });
 
   test('Get the intersections of sample: R8,U5,L5,D3 & U7,R6,D4,L4', () => {
-    const path1 = 'R8,U5,L5,D31';
+    const path1 = 'R8,U5,L5,D3';
     const path2 = 'U7,R6,D4,L4';
     const mergedPaths = mapPath(path2, mapPath(path1, {}, 'A'), 'B');
     const intersections = getIntersections(mergedPaths);
@@ -82,7 +82,7 @@ describe('Day 3: Part 1', () => {
   });
 
   test('Calculate Manhattan distance of sample: R8,U5,L5,D3 & U7,R6,D4,L4', () => {
-    const path1 = 'R8,U5,L5,D31';
+    const path1 = 'R8,U5,L5,D3';
     const path2 = 'U7,R6,D4,L4';
     const mergedPaths = mapPath(path2, mapPath(path1, {}, 'A'), 'B');
     const intersections = getIntersections(mergedPaths);
@@ -113,5 +113,12 @@ describe('Day 3: Part 1', () => {
 });
 
 // describe('Day 3: Part 2', () => {
-
+//   test('Get the number of steps to two paths intersections', () => {
+//     // const path1 = 'R8,U5,L5,D3';
+//     // const path2 = 'U7,R6,D4,L4';
+//     // const { grid, vectors } = mapPath(path1, {}, 'A');
+//     // const { vectors: newVectors } = mapPath(path2, grid, 'B', vectors);
+//     // const smallest = getSmallestVector(newVectors);
+//     // expect(1).toBe(2);
+//   });
 // });
