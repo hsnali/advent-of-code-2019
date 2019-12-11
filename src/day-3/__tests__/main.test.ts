@@ -1,13 +1,13 @@
 import {
-  getPathMove,
+  convertPath,
   mapPath,
   getIntersections,
   getManhattanDistance
 } from '../main';
 
 describe('Day 3: Part 1', () => {
-  test('Convert a text path (R1) to a directional move (1,0)', () => {
-    expect(getPathMove('R1')).toMatchObject([1, 0]);
+  test('Convert a text path (R1) to a directional and vector', () => {
+    expect(convertPath('R1')).toMatchObject(['R', 1]);
   });
 
   test('Convert a path to a hashmap', () => {

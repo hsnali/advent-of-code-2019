@@ -1,4 +1,4 @@
-import { IGrid, IDirection, IPath } from './interfaces';
+import { IGrid, IDirection } from './interfaces';
 
 const directions: IDirection = {
   U: [0, 1],
@@ -7,14 +7,9 @@ const directions: IDirection = {
   R: [1, 0]
 };
 
-export const getPathMove = (path: string): number[] => {
-  const [, direction] = path.split(/([A-Z])/);
-  return directions[direction];
-};
-
-export const convertPath = (path: string): IPath => {
+export const convertPath = (path: string): (string | number)[] => {
   const [, direction, vector] = path.split(/([A-Z])/);
-  return { direction, vector: +vector };
+  return [direction, +vector];
 };
 
 export const mapPath = (path: string, grid: IGrid = {}, marker = '-') => {
@@ -23,7 +18,7 @@ export const mapPath = (path: string, grid: IGrid = {}, marker = '-') => {
   let y0 = 0;
 
   pathSteps.forEach((step, index) => {
-    const { direction, vector } = convertPath(step);
+    const [direction, vector] = convertPath(step);
     const [xMove, yMove] = directions[direction];
     let x1 = x0;
     let y1 = y0;

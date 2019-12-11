@@ -1,8 +1,3 @@
-export interface IPath {
-  direction: string;
-  vector: number;
-}
-
 export interface IDirection {
   [index: string]: number[];
 }
