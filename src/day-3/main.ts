@@ -3,130 +3,82 @@ interface IPath {
   vector: number;
 }
 
+interface IDirection {
+  [index: string]: number[];
+}
+
+const directions: IDirection = {
+  U: [0, 1],
+  D: [0, -1],
+  L: [-1, 0],
+  R: [1, 0]
+};
+
+export const getPathMove = (path: string): number[] => {
+  const [, direction, vector] = path.split(/([A-Z])/);
+
+  return directions[direction];
+};
+
 export const convertPath = (path: string): IPath => {
   const [, direction, vector] = path.split(/([A-Z])/);
 
   return { direction, vector: +vector };
 };
 
-export const getCoordinates = (paths: string, origin = [0, 0]) => {
-  const map: number[][] = [];
+export const mapPath = (path: string, grid = {}, marker = '-') => {
+  const pathSteps: string[] = path.split(',');
+  let x0 = 0;
+  let y0 = 0;
 
-  paths.split(',').reduce((pointer: number[], current: string) => {
-    const { direction, vector } = convertPath(current);
-    // console.log('direction vector', direction, vector);
+  pathSteps.forEach((step, index) => {
+    const { direction, vector } = convertPath(step);
+    const [xMove, yMove] = directions[direction];
+    let x1 = x0;
+    let y1 = y0;
 
-    let [x, y] = pointer;
-    let x2 = x;
-    let y2 = y;
+    for (let i = 0; i < vector; i++) {
+      x1 += xMove;
+      y1 += yMove;
+      //@ts-ignore
+      let contents = grid[`${x1}_${y1}`] || marker;
+      // console.log('contents', contents);
 
-    switch (direction) {
-      case 'U':
-        y2 = y + vector;
-        break;
-      case 'D':
-        y2 = y - vector;
-        break;
-      case 'L':
-        x2 = x - vector;
-        break;
-      case 'R':
-        x2 = x + vector;
-        break;
-      default:
-        break;
+      //@ts-ignore
+      grid[`${x1}_${y1}`] =
+        contents !== undefined && contents !== marker
+          ? contents + marker
+          : contents;
     }
 
-    map.push([x2, y2]);
-    return [x2, y2];
-  }, origin);
-  return map;
-};
-
-export const getLargestPoint = (items: number[], curry: number = 0): number => {
-  return items.reduce((largest, current) => {
-    if (typeof current === 'object') return getLargestPoint(current, largest);
-    return largest > current ? largest : current;
-  }, curry);
-};
-
-export const generateArrayGrid = (
-  length: number,
-  placeholder: string | number = '.'
-) => Array.from({ length }, () => Array.from({ length }, () => placeholder));
-
-export const drawPath = (
-  coordinates: number[][],
-  grid: (string | number)[][],
-  origin: number[] = [0, 0]
-) => {
-  // const vectors = getCoordinates(path);
-  const symbol = '|';
-  let step = origin;
-  coordinates.forEach((current, index) => {
-    let [x0, y0] = step;
-    const [x1, y1] = current;
-
-    let directionX = x1 >= x0 ? 1 : -1;
-    let directionY = y1 >= y0 ? 1 : -1;
-
-    let indexX = x0;
-    let indexY = y0;
-    let loop = 0;
-
-    step = current;
-
-    // console.log([x1, y1]);
-    grid[x1][y1] = grid[x1][y1] === '.' ? '+' : 'X';
-
-    while (true) {
-      let moveX = indexX + 1 * directionX;
-      let moveY = indexY + 1 * directionY;
-
-      if (x0 !== x1) {
-        indexX = moveX;
-      }
-
-      if (y0 !== y1) {
-        indexY = moveY;
-      }
-
-      if (indexX == x1 && indexY == y1) {
-        break;
-      }
-
-      if (grid && grid[indexX]) {
-        let sign = grid[indexX][indexY] !== '.' ? 'X' : symbol;
-        grid[indexX][indexY] = sign;
-      }
-
-      // Endloop recovery
-      if (loop > grid.length) {
-        break;
-      }
-      loop += 1;
-    }
+    x0 = x1;
+    y0 = y1;
   });
-
   return grid;
 };
 
-export const getIntersections = (path: string[][]) => {
-  return path.reduce((points, current, index) => {
-    let coords = current.reduce((row, item, index) => {
-      if (item === 'X') return [...row, index];
-      return row;
-    }, []);
+export const getIntersections = (grid = {}): number[][] => {
+  let v = Object.keys(grid).reduce((intersections, current) => {
+    //@ts-ignore
+    // console.log('current', current, grid[current]);
 
-    return [...points, ...coords.map(i => [index, i])];
+    //@ts-ignore
+    if (grid[current].length === 1) return intersections;
+    //@ts-ignore
+    const item = grid[current];
+    const [x, y] = current.split('_');
+    // console.log(x, y);
+    return [...intersections, [+x, +y]];
   }, []);
+
+  return v;
 };
 
-export const getManhattanDistance = (point: number[]) =>
+export const addDistances = (point: number[]) =>
   point.reduce((total, current) => current + total, 0);
 
-export const getLowestDistance = (coordinates: number[][]) => {
-  const distances = coordinates.map(getManhattanDistance);
+export const getManhattanDistance = (coordinates: number[][]) => {
+  const distances = coordinates.map(addDistances);
   const lowest = Math.min.apply(Math, distances);
   return lowest;
 };
