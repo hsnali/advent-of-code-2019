@@ -86,9 +86,9 @@ describe('Day 3: Part 1', () => {
     const path2 = 'U7,R6,D4,L4';
     const mergedPaths = mapPath(path2, mapPath(path1, {}, 'A'), 'B');
     const intersections = getIntersections(mergedPaths);
-    const mdistance = getManhattanDistance(intersections);
+    const distance = getManhattanDistance(intersections);
 
-    expect(mdistance).toBe(6);
+    expect(distance).toBe(6);
   });
 
   test('Calculate Manhattan distance of sample: R75,D30,R83,U83,L12,D49,R71,U7,L72 & U62,R66,U55,R34,D71,R55,D58,R83', () => {
