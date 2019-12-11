@@ -12,13 +12,19 @@ export const convertPath = (path: string): (string | number)[] => {
   return [direction, +vector];
 };
 
-export const mapPath = (path: string, grid: IGrid = {}, marker = '-') => {
-  const pathSteps: string[] = path.split(',');
+export const mapPath = (
+  path: string,
+  grid: IGrid = {},
+  marker = '-',
+  saveSteps = false
+) => {
+  const paths: string[] = path.split(',');
   let x0 = 0;
   let y0 = 0;
+  let stepCounter = 0;
 
-  pathSteps.forEach((step, index) => {
-    const [direction, vector] = convertPath(step);
+  paths.forEach((current, index) => {
+    const [direction, vector] = convertPath(current);
     const [xMove, yMove] = directions[direction];
     let x1 = x0;
     let y1 = y0;
@@ -26,11 +32,27 @@ export const mapPath = (path: string, grid: IGrid = {}, marker = '-') => {
     for (let i = 0; i < vector; i++) {
       x1 += xMove;
       y1 += yMove;
+      stepCounter += 1;
+
       let contents = grid[`${x1}_${y1}`] || marker;
-      grid[`${x1}_${y1}`] =
-        contents !== undefined && contents !== marker
-          ? contents + marker
-          : contents;
+
+      if (!saveSteps) {
+        grid[`${x1}_${y1}`] =
+          contents !== marker ? `${contents}${marker}` : `${contents}`;
+      } else {
+        // get previous mark and steps to point
+        let [mark, steps = 0] = contents.split('_');
+
+        // if its a different wire add both steps by wires to this point
+        if (mark && mark !== marker) {
+          let totalSteps = stepCounter + +steps;
+          grid[`${x1}_${y1}`] = `${mark}${marker}_${totalSteps}`;
+        } else {
+          // otherwise same wire, ignore secondary steps to this point
+          let totalSteps = steps !== 0 ? steps : stepCounter;
+          grid[`${x1}_${y1}`] = `${contents}_${totalSteps}`;
+        }
+      }
     }
 
     x0 = x1;
@@ -54,4 +76,17 @@ export const getManhattanDistance = (coordinates: number[][]) => {
   const distances = coordinates.map(addDistances);
   const lowest = Math.min.apply(Math, distances);
   return lowest;
+};
+
+export const getClosestIntersection = (paths: IGrid): number => {
+  const steps = Object.values(paths)
+    .filter(current => {
+      const [point] = current.split('_');
+      if (point.length > 1) return true;
+      return;
+    })
+    .map(point => parseInt(point.split('_')[1], 10));
+  const closest = Math.min.apply(Math, steps);
+
+  return closest;
 };

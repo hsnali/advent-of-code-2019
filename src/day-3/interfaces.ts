@@ -1,3 +1,8 @@
+export interface IGridPoint {
+  intersection: boolean;
+  steps: number;
+}
+
 export interface IDirection {
   [index: string]: number[];
 }
