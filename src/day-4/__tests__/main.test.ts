@@ -2,12 +2,12 @@ import { getRange, generatePassword } from '../main';
 
 describe('Day 4: Part 1', () => {
   test('Splits input to lower and upper range of numbers', () => {
-    const input = '111111-222222';
-    expect(getRange(input)).toEqual([111111, 222222]);
+    const input = '123456-234567';
+    expect(getRange(input)).toEqual([123456, 234567]);
   });
 
   test('Returns a six digit number', () => {
-    const input = '111111-222222';
+    const input = '123456-234567';
     const range = getRange(input);
     const password = generatePassword(range);
 
@@ -15,7 +15,7 @@ describe('Day 4: Part 1', () => {
   });
 
   test('Number  is in the range provided', () => {
-    const input = '111111-222222';
+    const input = '123456-234567';
     const [lower, upper] = getRange(input);
     const password = generatePassword([lower, upper]);
 
@@ -27,8 +27,22 @@ describe('Day 4: Part 1', () => {
     const input = '123456-456789';
     const [lower, upper] = getRange(input);
     const password = generatePassword([lower, upper]);
+    const totalRepeates = password.toString().match(/(.)\1/g).length;
 
-    expect(password.toString()).toMatch(/(.)\1/);
+    expect(totalRepeates).toBe(1);
+  });
+
+  test('Number never decreases from left to right', () => {
+    const input = '123456-456789';
+    const [lower, upper] = getRange(input);
+    const password = generatePassword([lower, upper]);
+
+    const increases = password
+      .toString()
+      .split('')
+      .reduce((prev, num) => (num >= prev ? -1 : 1), -1);
+
+    expect(increases).toBe(-1);
   });
 });
 
