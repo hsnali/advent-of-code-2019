@@ -15,6 +15,5 @@ export const generatePassword = (range: number[]) => {
     }
   }
 
-  //   return 124455;
   return options[0];
 };

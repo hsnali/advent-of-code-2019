@@ -37,12 +37,16 @@ describe('Day 4: Part 1', () => {
     const [lower, upper] = getRange(input);
     const password = generatePassword([lower, upper]);
 
+    //@ts-ignore
     const increases = password
       .toString()
       .split('')
-      .reduce((prev, num) => (num >= prev ? -1 : 1), -1);
-
-    expect(increases).toBe(-1);
+      .reduce(
+        (prev, num) => (parseInt(num, 10) >= prev ? parseInt(num, 10) : -1),
+        -1
+      );
+    //223450
+    expect(increases).not.toBe(-1);
   });
 });
 
