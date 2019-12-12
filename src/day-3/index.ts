@@ -8,12 +8,11 @@ import input from './input';
 
 const [path1, path2] = input;
 
-const mergedPaths = mapPath(path2, mapPath(path1, {}, 'A'), 'B');
-const intersections = getIntersections(mergedPaths);
+const map1 = mapPath(path1);
+const map2 = mapPath(path2);
+const intersections = getIntersections(map1, map2);
 const distance = getManhattanDistance(intersections);
-
-const dayTwoPaths = mapPath(path2, mapPath(path1, {}, 'A', true), 'B', true);
-const closest = getClosestIntersection(dayTwoPaths);
+const closest = getClosestIntersection(map1, map2, intersections);
 
 console.log('************ Day 3 ************');
 console.log(`Part One: ${distance}`);

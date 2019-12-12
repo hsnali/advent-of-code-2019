@@ -12,18 +12,14 @@ export const convertPath = (path: string): (string | number)[] => {
   return [direction, +vector];
 };
 
-export const mapPath = (
-  path: string,
-  grid: IGrid = {},
-  marker = '-',
-  saveSteps = false
-) => {
+export const mapPath = (path: string) => {
+  const map = new Map();
   const paths: string[] = path.split(',');
   let x0 = 0;
   let y0 = 0;
   let stepCounter = 0;
 
-  paths.forEach((current, index) => {
+  paths.forEach(current => {
     const [direction, vector] = convertPath(current);
     const [xMove, yMove] = directions[direction];
     let x1 = x0;
@@ -34,24 +30,8 @@ export const mapPath = (
       y1 += yMove;
       stepCounter += 1;
 
-      let contents = grid[`${x1}_${y1}`] || marker;
-
-      if (!saveSteps) {
-        grid[`${x1}_${y1}`] =
-          contents !== marker ? `${contents}${marker}` : `${contents}`;
-      } else {
-        // get previous mark and steps to point
-        let [mark, steps = 0] = contents.split('_');
-
-        // if its a different wire add both steps by wires to this point
-        if (mark && mark !== marker) {
-          let totalSteps = stepCounter + +steps;
-          grid[`${x1}_${y1}`] = `${mark}${marker}_${totalSteps}`;
-        } else {
-          // otherwise same wire, ignore secondary steps to this point
-          let totalSteps = steps !== 0 ? steps : stepCounter;
-          grid[`${x1}_${y1}`] = `${contents}_${totalSteps}`;
-        }
+      if (!map.has(`${x1},${y1}`)) {
+        map.set(`${x1},${y1}`, stepCounter);
       }
     }
 
@@ -59,34 +39,43 @@ export const mapPath = (
     y0 = y1;
   });
 
-  return grid;
+  return map;
 };
 
-export const getIntersections = (grid: IGrid = {}): number[][] =>
-  Object.keys(grid).reduce((intersections, current) => {
-    if (grid[current].length === 1) return intersections;
-    const [x, y] = current.split('_');
-    return [...intersections, [+x, +y]];
-  }, []);
+export const getIntersections = (
+  map1: Map<string, number>,
+  map2: Map<string, number>
+): string[] => {
+  const intersections: string[] = [];
 
-export const addDistances = (point: number[]) =>
-  point.reduce((total, current) => Math.abs(current) + total, 0);
+  for (let key of map1.keys()) {
+    if (map2.has(key)) intersections.push(key);
+  }
 
-export const getManhattanDistance = (coordinates: number[][]) => {
+  return intersections;
+};
+
+export const addDistances = (points: string) => {
+  const [x, y] = points.split(',').map(p => +p);
+  return Math.abs(x) + Math.abs(y);
+};
+
+export const getManhattanDistance = (coordinates: string[]) => {
   const distances = coordinates.map(addDistances);
   const lowest = Math.min.apply(Math, distances);
   return lowest;
 };
 
-export const getClosestIntersection = (paths: IGrid): number => {
-  const steps = Object.values(paths)
-    .filter(current => {
-      const [point] = current.split('_');
-      if (point.length > 1) return true;
-      return;
-    })
-    .map(point => parseInt(point.split('_')[1], 10));
-  const closest = Math.min.apply(Math, steps);
+export const getClosestIntersection = (
+  map1: Map<string, number>,
+  map2: Map<string, number>,
+  intersections: string[]
+): number => {
+  const crossPoints: number[] = [];
 
-  return closest;
+  intersections.forEach(point => {
+    crossPoints.push(map1.get(point) + map2.get(point));
+  });
+
+  return Math.min.apply(Math, crossPoints);
 };
