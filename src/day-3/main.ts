@@ -1,4 +1,4 @@
-import { IGrid, IDirection } from './interfaces';
+import { IDirection } from './interfaces';
 
 const directions: IDirection = {
   U: [0, 1],
