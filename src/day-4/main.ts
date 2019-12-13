@@ -3,17 +3,23 @@ export const getRange = (input: string) => {
   return input.split('-').map(Math.abs);
 };
 
-export const generatePassword = (range: number[]) => {
+export const generatePasswords = (range: number[]) => {
   const [lower, upper] = range;
   const options = [];
 
-  for (let i = lower; i < upper; i++) {
-    let p = i + 1;
-    let repeated = p.toString().match(/(.)\1/g);
-    if (repeated && repeated.length === 1) {
-      options.push(p);
+  for (let i = lower; i <= upper; i++) {
+    const num = i.toString();
+    // refactored from: https://www.youtube.com/watch?v=8ruAKdZf9fY
+    const chars = [...num];
+    const map: { [index: string]: number } = {};
+    chars.map(c => (map[c] = (map[c] || 0) + 1));
+
+    const hasOnlyDouble = Object.entries(map).find(entry => entry[1] === 2);
+
+    if (num.length === 6 && hasOnlyDouble && num === chars.sort().join('')) {
+      options.push(i);
     }
   }
 
-  return options[0];
+  return options;
 };
